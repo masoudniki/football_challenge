@@ -91,6 +91,29 @@ class WalletControllerTest extends TestCase
         $this->assertEquals($coupon->user_id,$user->id);
 
     }
+    // test for double spending coupon
+    public function test_user_can_not_apply_a_coupon_while_the_coupon_is_attached_to_another_user(){
+        //arrange
+        $this->seed();
+        $user=User::factory()->create();
+        $coupon=CouponCode::factory()->create();
+        $coupon->update(["user_id"=>$user->id]);
+        $coupon=$coupon->fresh();
+        //act
+        $this->postJson("/api/v1/wallet/applyCoupon",
+            [
+                "username"=>$user->username,
+                "coupon_code"=>$coupon->code
+            ]
+        )
+            //assertion
+            ->assertStatus(400)
+            ->assertJson(function (AssertableJson $json){
+                $json
+                    ->has("message")
+                    ->where("message","coupon_has_been_used");
+            });
 
+    }
 
 }
