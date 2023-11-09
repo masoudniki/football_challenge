@@ -20,7 +20,7 @@ class WalletController extends Controller
 {
     public function applyCoupon(ApplyCouponCodeRequest $couponCodeRequest){
         $couponCode=$couponCodeRequest->get("coupon_code");
-        $user=User::query()->where("username",$couponCodeRequest->get("user"))->first();
+        $user=User::query()->whereUsername($couponCodeRequest->get("username"))->first();
 
         DB::beginTransaction();
         try {
@@ -43,7 +43,7 @@ class WalletController extends Controller
             TransactionInformation::query()->create(
                 [
                     "transaction_id"=>$transaction->id,
-                    "ti_key_id"=>TransactionInformationKeys::query()->whereName("coupon_code")->id,
+                    "ti_key_id"=>TransactionInformationKeys::query()->whereName("coupon_code")->first()->id,
                     "value"=>$couponRecord->code
                 ]
             );
@@ -54,7 +54,7 @@ class WalletController extends Controller
             DB::rollBack();
             return response()->json(["message"=>"coupon_has_been_used_or_does_not_exists", Response::HTTP_BAD_REQUEST]);
         } catch (\Exception $exception){
-            Log::error($exception->getMessage());
+            Log::error($exception->getMessage(),$exception->getTrace());
             DB::rollBack();
             return response()->json(
                 ["message"=>"something_went_wrong_during_applying_coupon_code"]

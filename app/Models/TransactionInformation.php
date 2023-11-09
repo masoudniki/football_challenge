@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionInformation extends Model
 {
     use HasFactory;
-    protected $table="user_transactions";
+    protected $table="transactions_information";
     protected $fillable=[
         "transaction_id",
         "ti_key_id",
