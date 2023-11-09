@@ -20,7 +20,7 @@ class TransactionInformationKeySeeder extends Seeder
     public function run(): void
     {
         foreach ($this->keys as $key){
-            TransactionInformationKeys::query()->insert(
+            TransactionInformationKeys::query()->create(
                 [
                     "name"=>$key
                 ]

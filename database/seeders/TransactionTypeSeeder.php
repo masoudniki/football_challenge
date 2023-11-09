@@ -18,7 +18,7 @@ class TransactionTypeSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->types as $type){
-            TransactionType::query()->insert([
+            TransactionType::query()->create([
                 "name"=>$type
             ]);
         }
