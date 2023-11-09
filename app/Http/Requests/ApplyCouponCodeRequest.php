@@ -23,7 +23,7 @@ class ApplyCouponCodeRequest extends FormRequest
     {
         return [
             'username'=>["bail","required","regex:/^09[0-9]{9}$/","exists:users,username"],
-            'coupon_code'=>["bail","required","min:3","max:20"]
+            'coupon_code'=>["bail","required","min:3","max:20","exists:coupon_codes,code"]
         ];
     }
 }
