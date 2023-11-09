@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\TransactionType;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class TransactionTypeSeeder extends Seeder
+{
+    public $types=[
+        "coupon",
+        "payment"
+    ];
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        foreach ($this->types as $type){
+            TransactionType::query()->insert([
+                "name"=>$type
+            ]);
+        }
+    }
+}
