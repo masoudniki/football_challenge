@@ -22,7 +22,7 @@ class ApplyCouponCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username'=>["bail","required","regex:/^09[0-9]{9}$/","exists:users,username"],
+            'username'=>["bail","required","regex:/^\+[1-9]\d{1,14}$/","exists:users,username"],
             'coupon_code'=>["bail","required","min:3","max:20","exists:coupon_codes,code"]
         ];
     }
