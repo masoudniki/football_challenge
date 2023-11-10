@@ -37,28 +37,28 @@ class WalletController extends Controller
             $transaction=Transaction::query()->create(
                 [
                     "amount"=>$chargeCode->amount,
-                    "type_id"=>TransactionType::query()->whereName("coupon")->first()->id,
+                    "type_id"=>TransactionType::query()->whereName("charge_code")->first()->id,
                     "user_id"=>$user->id
                 ]
             );
             TransactionInformation::query()->create(
                 [
                     "transaction_id"=>$transaction->id,
-                    "ti_key_id"=>TransactionInformationKeys::query()->whereName("coupon_code")->first()->id,
+                    "ti_key_id"=>TransactionInformationKeys::query()->whereName("charge_code")->first()->id,
                     "value"=>$chargeCode->code
                 ]
             );
             $chargeCode->update(["user_id"=>$user->id]);
             DB::commit();
-            return response()->json(["message"=>"coupon_successfully_applied"]);
+            return response()->json(["message"=>"charge_code_successfully_applied"]);
         }catch (CouponCodeHasBeenUsedException $exception){
             DB::rollBack();
-            return response()->json(["message"=>"coupon_has_been_used_or_does_not_exists"],Response::HTTP_BAD_REQUEST);
+            return response()->json(["message"=>"charge_code_has_been_used_or_does_not_exists"],Response::HTTP_BAD_REQUEST);
         } catch (\Exception $exception){
             Log::error($exception->getMessage(),$exception->getTrace());
             DB::rollBack();
             return response()->json(
-                ["message"=>"something_went_wrong_during_applying_coupon_code"]
+                ["message"=>"something_went_wrong_during_applying_charge_code_code"]
             ,Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
