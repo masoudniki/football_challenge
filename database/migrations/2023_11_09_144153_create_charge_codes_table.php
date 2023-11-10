@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("code")->unique();
             $table->unsignedBigInteger("amount");
             $table->integer("usage_limit");
-            $table->integer("usage_count");
+            $table->integer("usage_count")->default(0);
             $table->timestamps();
         });
     }
