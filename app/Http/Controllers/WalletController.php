@@ -28,7 +28,7 @@ class WalletController extends Controller
             //retrieve coupon
             $chargeCode=ChargeCode::query()
                 ->where("code",$chargeCode)
-                ->where("usage_count","<","limit_count")
+                ->where("usage_count","<","usage_limit")
                 ->lockForUpdate()
                 ->first();
             if($chargeCode==null){
