@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApplyCouponCodeRequest extends FormRequest
+class ApplyChargeCode extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class ApplyCouponCodeRequest extends FormRequest
     {
         return [
             'username'=>["bail","required","regex:/^\+[1-9]\d{1,14}$/","exists:users,username"],
-            'coupon_code'=>["bail","required","min:3","max:20","exists:coupon_codes,code"]
+            'charge_code'=>["bail","required","min:3","max:20"]
         ];
     }
 }

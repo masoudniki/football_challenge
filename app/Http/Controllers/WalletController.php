@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\enums\TransactionTypes;
 use App\Exceptions\CouponCodeHasBeenUsedException;
-use App\Http\Requests\ApplyCouponCodeRequest;
+use App\Http\Requests\ApplyChargeCode;
 
 use App\Models\ChargeCode;
 use App\Models\Transaction;
@@ -18,25 +18,25 @@ use Symfony\Component\HttpFoundation\Response ;
 
 class WalletController extends Controller
 {
-    public function applyChargeCode(ApplyCouponCodeRequest $couponCodeRequest){
-        $couponCode=$couponCodeRequest->get("coupon_code");
+    public function applyChargeCode(ApplyChargeCode $couponCodeRequest){
+        $couponCode=$couponCodeRequest->get("charge_code");
         $user=User::query()->whereUsername($couponCodeRequest->get("username"))->first();
 
         DB::beginTransaction();
         try {
             //retrieve coupon
-            $couponRecord=ChargeCode::query()
+            $chargeCode=ChargeCode::query()
                 ->where("code",$couponCode)
-                ->whereNull("user_id")
+                ->where("usage_count","<","limit_count")
                 ->lockForUpdate()
                 ->first();
 
-            if($couponRecord==null){
+            if($chargeCode==null){
                 throw new CouponCodeHasBeenUsedException("coupon_has_been_used_or_does_not_exists");
             }
             $transaction=Transaction::query()->create(
                 [
-                    "amount"=>$couponRecord->amount,
+                    "amount"=>$chargeCode->amount,
                     "type_id"=>TransactionType::query()->whereName("coupon")->first()->id,
                     "user_id"=>$user->id
                 ]
@@ -45,15 +45,15 @@ class WalletController extends Controller
                 [
                     "transaction_id"=>$transaction->id,
                     "ti_key_id"=>TransactionInformationKeys::query()->whereName("coupon_code")->first()->id,
-                    "value"=>$couponRecord->code
+                    "value"=>$chargeCode->code
                 ]
             );
-            $couponRecord->update(["user_id"=>$user->id]);
+            $chargeCode->update(["user_id"=>$user->id]);
             DB::commit();
             return response()->json(["message"=>"coupon_successfully_applied"]);
         }catch (CouponCodeHasBeenUsedException $exception){
             DB::rollBack();
-            return response()->json(["message"=>"coupon_has_been_used"],Response::HTTP_BAD_REQUEST);
+            return response()->json(["message"=>"coupon_has_been_used_or_does_not_exists"],Response::HTTP_BAD_REQUEST);
         } catch (\Exception $exception){
             Log::error($exception->getMessage(),$exception->getTrace());
             DB::rollBack();
