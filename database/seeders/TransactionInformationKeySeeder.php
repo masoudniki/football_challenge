@@ -9,8 +9,8 @@ use Illuminate\Database\Seeder;
 class TransactionInformationKeySeeder extends Seeder
 {
     public $keys=[
-        "coupon_code",
-        "coupon_id",
+        "charge_code",
+        "charge_code_id",
         "payment_uuid",
         "payment_confirmation_code"
     ];

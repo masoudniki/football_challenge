@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 class TransactionTypeSeeder extends Seeder
 {
     public $types=[
-        "coupon",
+        "charge_code",
         "payment"
     ];
     /**
