@@ -19,7 +19,7 @@ class ChargeCodeFactory extends Factory
         return [
             "code"=>fake()->unique()->regexify("/[A-Za-z0-9]{20}/"),
             "amount"=>fake()->randomDigitNotZero(),
-            "usage_limit"=>fake()->randomDigit(),
+            "usage_limit"=>fake()->randomDigitNotZero(),
             "usage_count"=>0
         ];
     }
