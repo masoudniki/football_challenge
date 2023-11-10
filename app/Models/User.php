@@ -22,10 +22,12 @@ class User extends Authenticatable
         'username'
     ];
 
-    function coupon(){
-        return $this->hasMany(ChargeCode::class);
+    function chargeCodes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(ChargeCode::class,"user_charge_code","user_id");
     }
-    function transaction(){
+    function transaction(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(Transaction::class);
     }
 
