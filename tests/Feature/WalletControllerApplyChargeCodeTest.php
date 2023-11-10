@@ -83,7 +83,7 @@ class WalletControllerApplyChargeCodeTest extends TestCase
                     ->has("message")
                     ->where("message","charge_code_successfully_applied");
             });
-        $userTransactions=$user->transaction;
+        $userTransactions=$user->transactions;
         $chargeCode=$chargeCode->fresh();
         $userChargeCodes=$user->chargeCodes;
         $this->assertCount(1,$userTransactions);

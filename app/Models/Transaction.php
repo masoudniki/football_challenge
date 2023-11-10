@@ -14,8 +14,12 @@ class Transaction extends Model
         "amount",
         "type_id"
     ];
+    protected $with=["type"];
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function type(){
+        return $this->belongsTo(TransactionType::class);
     }
 }

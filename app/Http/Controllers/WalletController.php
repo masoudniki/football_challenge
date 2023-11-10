@@ -7,6 +7,7 @@ use App\Exceptions\ChargeCodeLimitCountReached;
 use App\Exceptions\ChargeCodeHasBeenUsedException;
 use App\Http\Requests\ApplyChargeCode;
 
+use App\Http\Resources\TransactionCollection;
 use App\Models\ChargeCode;
 use App\Models\Transaction;
 use App\Models\TransactionInformation;
@@ -77,12 +78,15 @@ class WalletController extends Controller
         }
     }
     public function credit(User $user){
-        $credit=$user->transaction()->sum("amount");
+        $credit=$user->transactions()->sum("amount");
         return \response()->json(
             [
                 "credit"=>$credit,
             ]
         );
+    }
+    public function transactions(User $user){
+        return new TransactionCollection($user->transactions);
     }
 
 }

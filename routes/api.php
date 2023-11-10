@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(["prefix"=>"v1"],function (){
         Route::group(["prefix"=>"wallet"],function (){
             Route::get("/credit/{user:username}",[WalletController::class,"credit"]);
+            Route::get("/transactions/{user:username}",[WalletController::class,"transactions"]);
             Route::post("/applyChargeCode",[WalletController::class,"applyChargeCode"]);
         });
 });

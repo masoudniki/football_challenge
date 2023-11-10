@@ -26,7 +26,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(ChargeCode::class,"user_charge_code","user_id");
     }
-    function transaction(): \Illuminate\Database\Eloquent\Relations\HasMany
+    function transactions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Transaction::class);
     }
