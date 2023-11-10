@@ -23,7 +23,7 @@ class ApplyChargeCode extends FormRequest
     {
         return [
             'username'=>["bail","required","regex:/^\+[1-9]\d{1,14}$/","exists:users,username"],
-            'charge_code'=>["bail","required","min:3","max:20"]
+            'charge_code'=>["bail","required","min:3","max:20","exists:charge_codes,code"]
         ];
     }
 }
