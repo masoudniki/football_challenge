@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\enums\TransactionTypes;
-use App\Exceptions\CouponCodeHasBeenUsedException;
+use App\Exceptions\ChargeCodeDoesNotExistsOrLimitCountReached;
+use App\Exceptions\ChargeCodeHasBeenUsedException;
 use App\Http\Requests\ApplyChargeCode;
 
 use App\Models\ChargeCode;
@@ -18,21 +19,24 @@ use Symfony\Component\HttpFoundation\Response ;
 
 class WalletController extends Controller
 {
-    public function applyChargeCode(ApplyChargeCode $couponCodeRequest){
-        $couponCode=$couponCodeRequest->get("charge_code");
-        $user=User::query()->whereUsername($couponCodeRequest->get("username"))->first();
+    public function applyChargeCode(ApplyChargeCode $applyChargeCodeReq){
+        $chargeCode=$applyChargeCodeReq->get("charge_code");
+        $user=User::query()->whereUsername($applyChargeCodeReq->get("username"))->first();
 
         DB::beginTransaction();
         try {
             //retrieve coupon
             $chargeCode=ChargeCode::query()
-                ->where("code",$couponCode)
+                ->where("code",$chargeCode)
                 ->where("usage_count","<","limit_count")
                 ->lockForUpdate()
                 ->first();
-
             if($chargeCode==null){
-                throw new CouponCodeHasBeenUsedException("coupon_has_been_used_or_does_not_exists");
+                throw new ChargeCodeDoesNotExistsOrLimitCountReached("charge_code_does_not_exists_or_limit_count_reached");
+            }
+            $hasUserUsedChargeCode=$user->chargeCodes()->wherePivot("charge_code_id",$chargeCode->id)->exists();
+            if($hasUserUsedChargeCode){
+                throw new ChargeCodeHasBeenUsedException("coupon_has_been_used");
             }
             $transaction=Transaction::query()->create(
                 [
@@ -48,13 +52,20 @@ class WalletController extends Controller
                     "value"=>$chargeCode->code
                 ]
             );
-            $chargeCode->update(["user_id"=>$user->id]);
+            $user->chargeCodes()->save($chargeCode);
+            $chargeCode->update(["usage_count"=>++$chargeCode->usage_count]);
             DB::commit();
             return response()->json(["message"=>"charge_code_successfully_applied"]);
-        }catch (CouponCodeHasBeenUsedException $exception){
+        }
+        catch (ChargeCodeDoesNotExistsOrLimitCountReached $exception){
             DB::rollBack();
-            return response()->json(["message"=>"charge_code_has_been_used_or_does_not_exists"],Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $exception){
+            return response()->json(["message"=>"charge_code_does_not_exists_or_limit_count_reached"],Response::HTTP_BAD_REQUEST);
+        }
+        catch (ChargeCodeHasBeenUsedException $exception){
+            DB::rollBack();
+            return response()->json(["message"=>"charge_code_has_been_used"],Response::HTTP_BAD_REQUEST);
+        }
+        catch (\Exception $exception){
             Log::error($exception->getMessage(),$exception->getTrace());
             DB::rollBack();
             return response()->json(
