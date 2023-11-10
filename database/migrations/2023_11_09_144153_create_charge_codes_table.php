@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('coupon_codes', function (Blueprint $table) {
+        Schema::create('charge_codes', function (Blueprint $table) {
             $table->id();
             $table->string("code")->unique();
             $table->unsignedBigInteger("amount");
-            // to check coupon code has been used or not (we consider coupon as used when there is a user_id otherwise coupon it is free to use)
-            $table->unsignedBigInteger("user_id")->nullable();
+            $table->integer("usage_limit");
+            $table->integer("usage_count");
             $table->timestamps();
         });
     }

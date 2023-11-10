@@ -23,7 +23,7 @@ class User extends Authenticatable
     ];
 
     function coupon(){
-        return $this->hasMany(CouponCode::class);
+        return $this->hasMany(ChargeCode::class);
     }
     function transaction(){
         return $this->hasMany(Transaction::class);

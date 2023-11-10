@@ -6,7 +6,7 @@ use App\enums\TransactionTypes;
 use App\Exceptions\CouponCodeHasBeenUsedException;
 use App\Http\Requests\ApplyCouponCodeRequest;
 
-use App\Models\CouponCode;
+use App\Models\ChargeCode;
 use App\Models\Transaction;
 use App\Models\TransactionInformation;
 use App\Models\TransactionInformationKeys;
@@ -25,7 +25,7 @@ class WalletController extends Controller
         DB::beginTransaction();
         try {
             //retrieve coupon
-            $couponRecord=CouponCode::query()
+            $couponRecord=ChargeCode::query()
                 ->where("code",$couponCode)
                 ->whereNull("user_id")
                 ->lockForUpdate()

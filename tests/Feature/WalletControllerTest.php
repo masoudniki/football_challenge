@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\CouponCode;
+use App\Models\ChargeCode;
 use App\Models\Transaction;
 use App\Models\TransactionType;
 use App\Models\User;
@@ -69,7 +69,7 @@ class WalletControllerTest extends TestCase
         //arrange
         $this->seed();
         $user=User::factory()->create();
-        $coupon=CouponCode::factory()->create();
+        $coupon=ChargeCode::factory()->create();
         //act
         $this->postJson("/api/v1/wallet/applyCoupon",
             [
@@ -96,7 +96,7 @@ class WalletControllerTest extends TestCase
         //arrange
         $this->seed();
         $user=User::factory()->create();
-        $coupon=CouponCode::factory()->create();
+        $coupon=ChargeCode::factory()->create();
         $coupon->update(["user_id"=>$user->id]);
         $coupon=$coupon->fresh();
         //act
