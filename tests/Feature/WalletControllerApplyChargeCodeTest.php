@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
-class WalletControllerTest extends TestCase
+class WalletControllerApplyChargeCodeTest extends TestCase
 {
     use RefreshDatabase;
 
