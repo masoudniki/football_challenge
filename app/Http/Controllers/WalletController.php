@@ -76,5 +76,13 @@ class WalletController extends Controller
             };
         }
     }
+    public function credit(User $user){
+        $credit=$user->transaction()->sum("amount");
+        return \response()->json(
+            [
+                "credit"=>$credit,
+            ]
+        );
+    }
 
 }
