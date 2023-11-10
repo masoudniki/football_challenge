@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response ;
 
 class WalletController extends Controller
 {
-    public function applyCoupon(ApplyCouponCodeRequest $couponCodeRequest){
+    public function applyChargeCode(ApplyCouponCodeRequest $couponCodeRequest){
         $couponCode=$couponCodeRequest->get("coupon_code");
         $user=User::query()->whereUsername($couponCodeRequest->get("username"))->first();
 

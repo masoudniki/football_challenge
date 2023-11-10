@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(["prefix"=>"v1"],function (){
         Route::group(["prefix"=>"wallet"],function (){
 
-            Route::post("/applyCoupon",[WalletController::class,"applyCoupon"]);
+            Route::post("/applyChargeCode",[WalletController::class,"applyChargeCode"]);
 
         });
 });

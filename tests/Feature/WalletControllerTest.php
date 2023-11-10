@@ -15,9 +15,9 @@ class WalletControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_not_apply_coupon_when_username_does_not_exists(){
+    public function test_user_can_not_apply_charge_code_when_username_does_not_exists(){
         $this
-            ->postJson("/api/v1/wallet/applyCoupon",[
+            ->postJson("/api/v1/wallet/applyChargeCode",[
                 "username"=>"+989011111111",
                 "coupon_code"=>"tktkt",
             ])
@@ -30,9 +30,9 @@ class WalletControllerTest extends TestCase
                     ->where("errors.username.0","The selected username is invalid.");
             });
     }
-    public function test_user_can_not_apply_coupon_when_username_does_not_match_with_regex(){
+    public function test_user_can_not_apply_charge_code_when_username_does_not_match_with_regex(){
         $this
-            ->postJson("/api/v1/wallet/applyCoupon",[
+            ->postJson("/api/v1/wallet/applyChargeCode",[
                 "username"=>"0901",
                 "coupon_code"=>"tktkt",
             ])
@@ -45,12 +45,12 @@ class WalletControllerTest extends TestCase
                     ->where("errors.username.0","The username field format is invalid.");
             });
     }
-    public function test_user_can_not_apply_coupon_when_coupon_does_not_exists(){
+    public function test_user_can_not_apply_charge_code_when_charge_code_does_not_exists(){
         //arrange
         $user=User::factory()->create();
         //act
         $this
-            ->postJson("/api/v1/wallet/applyCoupon",[
+            ->postJson("/api/v1/wallet/applyChargeCode",[
                 "username"=>$user->username,
                 "coupon_code"=>"tktkt",
             ])
@@ -65,13 +65,13 @@ class WalletControllerTest extends TestCase
                     ->where("errors.coupon_code.0","The selected coupon code is invalid.");
             });
     }
-    public function test_user_can_apply_coupon_successfully(){
+    public function test_user_can_apply_charge_code_successfully(){
         //arrange
         $this->seed();
         $user=User::factory()->create();
         $coupon=ChargeCode::factory()->create();
         //act
-        $this->postJson("/api/v1/wallet/applyCoupon",
+        $this->postJson("/api/v1/wallet/applyChargeCode",
             [
                 "username"=>$user->username,
                 "coupon_code"=>$coupon->code
@@ -92,7 +92,7 @@ class WalletControllerTest extends TestCase
 
     }
     // test for double spending coupon
-    public function test_user_can_not_apply_a_coupon_while_the_coupon_is_attached_to_another_user(){
+    public function test_user_can_not_apply_a_charge_code_while_the_charge_code_is_attached_to_another_user(){
         //arrange
         $this->seed();
         $user=User::factory()->create();
@@ -100,7 +100,7 @@ class WalletControllerTest extends TestCase
         $coupon->update(["user_id"=>$user->id]);
         $coupon=$coupon->fresh();
         //act
-        $this->postJson("/api/v1/wallet/applyCoupon",
+        $this->postJson("/api/v1/wallet/applyChargeCode",
             [
                 "username"=>$user->username,
                 "coupon_code"=>$coupon->code
