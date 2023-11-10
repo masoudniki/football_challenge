@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Resources\TransactionInformationResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,5 +22,8 @@ class Transaction extends Model
     }
     public function type(){
         return $this->belongsTo(TransactionType::class);
+    }
+    public function information(){
+        return $this->hasMany(TransactionInformation::class,"transaction_id");
     }
 }

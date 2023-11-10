@@ -14,10 +14,11 @@ class TransactionInformation extends Model
         "ti_key_id",
         "value"
     ];
+    protected $with=["transactionKey"];
     function transaction(){
         return $this->belongsTo(Transaction::class,"transaction_id");
     }
-    function transactionKeyId(){
+    function transactionKey(){
         return $this->belongsTo(TransactionInformationKeys::class,"ti_key_id");
     }
 

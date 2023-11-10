@@ -88,5 +88,8 @@ class WalletController extends Controller
     public function transactions(User $user){
         return new TransactionCollection($user->transactions);
     }
+    public function transaction(User $user,Transaction $transaction){
+
+    }
 
 }

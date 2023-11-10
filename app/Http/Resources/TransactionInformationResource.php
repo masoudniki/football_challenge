@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TransactionResource extends JsonResource
+class TransactionInformationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,8 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=>$this->id,
-            "amount"=>$this->amount,
-            "type"=>$this->type->name,
-            "created_at"=>$this->created_at,
-            "information"=>TransactionInformationResource::collection($this->whenLoaded("information"))
+            "key"=>$this->transactionKey->name,
+            "value"=>$this->value
         ];
     }
 }
