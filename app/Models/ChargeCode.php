@@ -14,6 +14,7 @@ class ChargeCode extends Model
         "usage_limit",
         "usage_count"
     ];
+    protected $with=["users"];
     function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class,"user_charge_code","charge_code_id");
