@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\ChargeCodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,9 @@ Route::group(["prefix"=>"v1"],function (){
             Route::get("/credit/{user:username}",[WalletController::class,"credit"]);
             Route::get("/transactions/{user:username}",[WalletController::class,"transactions"]);
             Route::post("/applyChargeCode",[WalletController::class,"applyChargeCode"]);
+        });
+        Route::group(["prefix"=>"charge-code"],function (){
+            Route::get("/reports",[ChargeCodeController::class,"reports"]);
+            Route::get("/reports/{chargeCode:code}",[ChargeCodeController::class,"report"]);
         });
 });
