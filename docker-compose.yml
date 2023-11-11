@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  # PHP service with PHP-FPM
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: football_challenge
+      DB_USERNAME: football_challenge
+      DB_PASSWORD: football_challenge
+    volumes:
+      - ./:/var/www/html
+    command: php artisan serve
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: football_challenge
+      MYSQL_ROOT_PASSWORD: football_challenge
+      MYSQL_USER: football_challenge
+      MYSQL_PASSWORD: football_challenge
+    ports:
+      - "3306:3306"
