@@ -8,6 +8,7 @@ use App\Exceptions\ChargeCodeHasBeenUsedException;
 use App\Http\Requests\ApplyChargeCode;
 
 use App\Http\Resources\TransactionCollection;
+use App\Http\Resources\TransactionResource;
 use App\Models\ChargeCode;
 use App\Models\Transaction;
 use App\Models\TransactionInformation;
@@ -86,10 +87,10 @@ class WalletController extends Controller
         );
     }
     public function transactions(User $user){
-        return new TransactionCollection($user->transactions);
+        return new TransactionCollection($user->transactions()->without("information")->get());
     }
     public function transaction(User $user,Transaction $transaction){
-
+        return new TransactionResource($transaction);
     }
 
 }

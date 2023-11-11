@@ -15,7 +15,7 @@ class Transaction extends Model
         "amount",
         "type_id"
     ];
-    protected $with=["type"];
+    protected $with=["type","information"];
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
