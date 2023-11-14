@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\WalletController;
-use App\Http\Controllers\ChargeCodeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Services\ChargeCode\Http\Controllers\ChargeCodeController;
+use Services\Wallet\Http\Controllers\WalletController;
 
 /*
 |--------------------------------------------------------------------------

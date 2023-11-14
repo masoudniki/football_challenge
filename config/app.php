@@ -168,6 +168,13 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        /*
+        * Services Service Providers...
+        */
+        \Services\Wallet\Providers\WalletServiceProvider::class,
+        \Services\ChargeCode\Providers\ChargeCodeServiceProvider::class
+
+
     ])->toArray(),
 
     /*
