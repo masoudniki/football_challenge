@@ -7,6 +7,7 @@ else
 fi
 # Check if APP_KEY is set; if not, generate the key
 if ! grep -q "^APP_KEY=" .env; then
+    echo "APP_KEY=" >> .env
     php artisan key:generate
     echo "Generated APP_KEY"
 else
